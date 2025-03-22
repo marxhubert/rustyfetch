@@ -1,13 +1,4 @@
-pub fn get_logo() -> String {
-    r#"
-       .-""""""""-.
-     .'          '.
-    /   RustFetch  \
-   : ,          , :'
-    `._         _.'
-       `"'"""""'"` 
-    "#.to_string()
-}
+use std::fs;
 
 pub fn format_output(logo: String, infos: Vec<String>) -> String {
     let logo_lines: Vec<&str> = logo.lines().collect();
@@ -16,7 +7,6 @@ pub fn format_output(logo: String, infos: Vec<String>) -> String {
 
     let diff = max_lines - logo_lines.len().min(infos.len());
     let top = (diff - (diff % 2)) / 2;
-    let bottom = diff - top;
 
     let mut bloc_to_ajust = vec![""; max_lines];
 
