@@ -1,4 +1,6 @@
 use std::fs;
+use std::process::Command;
+use std::env;
 
 pub fn get_os() -> String {
     match fs::read_to_string("/etc/os-release") {
@@ -137,5 +139,31 @@ pub fn get_kernel() -> String {
             .trim_matches('"')
             .to_string(),
         Err(e) => format!("Unknown (Error: {})", e),
+    }
+}
+
+pub fn get_packages() -> String {
+    match Command::new("dpkg").arg("-l").output() {
+        Ok(output) => {
+            if output.status.success() {
+                let stdout = String::from_utf8_lossy(&output.stdout);
+                let count = stdout.lines()
+                    .filter(|line| line.starts_with("ii"))
+                    .count();
+                format!("{} (dpkg)", count)
+            } else {
+                "Unknown (dpkg failed)".to_string()
+            }
+        }
+        Err(e) => format!("Error: {}", e),
+    }
+}
+
+pub fn get_shell() -> String {
+    match env::var("SHELL") {
+        Ok(shell_path) => {
+            shell_path.split('/').last().unwrap_or("Unknown").to_string()
+        }
+        Err(e) => format!("Error: {}", e),
     }
 }
