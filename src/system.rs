@@ -1,7 +1,32 @@
 use std::fs;
 
 pub fn get_os() -> String {
-    "Linux".to_string()
+    match fs::read_to_string("/etc/os-release") {
+        Ok(content) => {
+            let mut pretty_name = None;
+            let mut name = None;
+            let mut version = None;
+
+            for line in content.lines() {
+                if line.starts_with("PRETTY_NAME=") {
+                    pretty_name = line.split('=').nth(1);
+                }
+                if line.starts_with("NAME=") {
+                    name = line.split('=').nth(1);
+                }
+                if line.starts_with("VERSION=") {
+                    version = line.split('=').nth(1);
+                }
+            }
+
+            match (pretty_name, name) {
+                (Some(p), _) => p.trim().trim_matches('"').to_string(),
+                (None, Some(n)) => format!("{} {}", n.trim().trim_matches('"').to_string(), version.unwrap_or("Unknown version").trim().trim_matches('"').to_string()),
+                (None, None) => "Linux (Unknown distro)".to_string(),
+            }
+        }
+        Err(e) => format!("Unknown OS (Error: {})", e),
+    }
 }
 
 pub fn get_hostname() -> String {

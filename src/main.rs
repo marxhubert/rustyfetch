@@ -12,9 +12,9 @@ fn main() {
     let infos = vec![
         format!("OS: {}", os),
         format!("Host: {}", hostname),
+        format!("Uptime: {}", uptime),
         format!("CPU: {}", cpu),
         format!("Memory: {}", memory),
-        format!("Uptime: {}", uptime),
     ];
     
     let logo = logo::get_logo();
