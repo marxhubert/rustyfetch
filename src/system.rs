@@ -67,3 +67,38 @@ fn format_memory(input: u64) -> String {
         format!("{:.2} {}B", value, units[factor])
     }
 }
+
+pub fn get_uptime() -> String {
+    match fs::read_to_string("/proc/uptime") {
+        Ok(content) => {
+            let uptime_secs = content
+                .split_whitespace()
+                .next()
+                .unwrap_or("0.0")
+                .parse::<f64>()
+                .unwrap_or(0.0);
+
+            let days = (uptime_secs / 86400.0).floor() as u64;
+            let hours = ((uptime_secs % 86400.0) / 3600.0).floor() as u64;
+            let mins = ((uptime_secs % 3600.0) / 60.0).floor() as u64;
+            let secs = (uptime_secs % 60.0).floor() as u64;
+
+            let mut parts = Vec::new();
+            if days > 0 {
+                parts.push(format!("{} day{}", days, if days > 1 { "s" } else { "" }));
+            }
+            if hours > 0 {
+                parts.push(format!("{} hour{}", hours, if hours > 1 { "s" } else { "" }));
+            }
+            if mins > 0 {
+                parts.push(format!("{} min{}", mins, if mins > 1 { "s" } else { "" }));
+            }
+            if secs > 0 {
+                parts.push(format!("{} sec{}", secs, if secs > 1 { "s" } else { "" }));
+            }
+
+            parts.join(", ")
+        }
+        Err(e) => format!("Unknown (Error reading /proc/uptime: {})", e),
+    }
+}
