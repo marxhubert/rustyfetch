@@ -14,7 +14,12 @@ pub fn format_output(logo: String, infos: Vec<String>) -> String {
     for i in 0..max_lines {
         let logo_line = logo_lines.get(i).unwrap_or(&"");
         let info_line = bloc_to_ajust.get(i).unwrap_or(&"");
-        output.push_str(&format!("{:<width$} {}\n", logo_line, info_line, width = logo_width + 3));
+        output.push_str(&format!(
+            "{:<width$} {}\n",
+            logo_line,
+            info_line,
+            width = logo_width + 3
+        ));
     }
     
     output
