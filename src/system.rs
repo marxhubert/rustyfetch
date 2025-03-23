@@ -127,3 +127,15 @@ pub fn get_uptime() -> String {
         Err(e) => format!("Unknown (Error reading /proc/uptime: {})", e),
     }
 }
+
+pub fn get_kernel() -> String {
+    match fs::read_to_string("/proc/version") {
+        Ok(content) => content.split_whitespace()
+            .nth(2)
+            .unwrap_or("Unknown")
+            .trim()
+            .trim_matches('"')
+            .to_string(),
+        Err(e) => format!("Unknown (Error: {})", e),
+    }
+}
