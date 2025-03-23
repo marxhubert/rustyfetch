@@ -9,12 +9,16 @@ fn main() {
     let memory = system::get_memory();
     let uptime = system::get_uptime();
     let kernel = system::get_kernel();
+    let packages = system::get_packages();
+    let shell = system::get_shell();
 
     let infos = vec![
         format!("OS: {}", os),
         format!("Host: {}", hostname),
         format!("Kernel: {}", kernel),
         format!("Uptime: {}", uptime),
+        format!("Packages: {}", packages),
+        format!("Shell: {}", shell),
         format!("CPU: {}", cpu),
         format!("Memory: {}", memory),
     ];
