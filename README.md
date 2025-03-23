@@ -1,4 +1,4 @@
-# RustFetch
+# RustyFetch
 
 RustFetch est un outil en ligne de commande inspiré de `screenfetch` et `neofetch`, écrit en Rust. Il affiche des informations système (OS, CPU, hostname, etc.) avec un logo ASCII. Ce projet vise à explorer des concepts systèmes, tout en apprenant un langage moderne comme Rust.
 
@@ -15,8 +15,8 @@ RustFetch est un outil en ligne de commande inspiré de `screenfetch` et `neofet
 - ...
 
 ## Comment exécuter
-1. Cloner le dépôt : `git clone https://github.com/marxhubert/rustfetch.git`
-2. Aller dans le dossier : `cd rustfetch`
+1. Cloner le dépôt : `git clone https://github.com/marxhubert/rustyfetch.git`
+2. Aller dans le dossier : `cd rustyfetch`
 3. Compiler et exécuter : `cargo run`
 
 ## Prochaines étapes
