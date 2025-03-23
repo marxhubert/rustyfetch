@@ -167,3 +167,13 @@ pub fn get_shell() -> String {
         Err(e) => format!("Error: {}", e),
     }
 }
+
+pub fn get_user() -> String {
+    match env::var("USER") {
+        Ok(user) => user,
+        Err(_) => match Command::new("whoami").output() {
+            Ok(output) => String::from_utf8_lossy(&output.stdout).trim().to_string(),
+            Err(e) => format!("Error: {}", e),
+        },
+    }
+}
