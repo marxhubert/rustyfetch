@@ -12,9 +12,9 @@
 - [x] Afficher la mémoire totale et utilisée
 - [x] Afficher l’uptime (temps depuis le démarrage)
 - [ ] Support multi-OS (Linux, macOS, Windows)
-- [ ] Couleurs dans le terminal
+- [x] Couleurs dans le terminal
 - [x] Détection de la distribution Linux (ex. : Ubuntu, Debian)
 - [ ] Logo ASCII dynamique (selon l’OS ou la distro)
 - [ ] Afficher des infos réseau (IP, interface active)
-- [ ] Afficher des infos l'utilisateur connecté
+- [x] Afficher des infos l'utilisateur connecté
 - [ ] Afficher des infos sur le DE
