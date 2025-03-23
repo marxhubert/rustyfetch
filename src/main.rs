@@ -8,10 +8,12 @@ fn main() {
     let cpu = system::get_cpu();
     let memory = system::get_memory();
     let uptime = system::get_uptime();
+    let kernel = system::get_kernel();
 
     let infos = vec![
         format!("OS: {}", os),
         format!("Host: {}", hostname),
+        format!("Kernel: {}", kernel),
         format!("Uptime: {}", uptime),
         format!("CPU: {}", cpu),
         format!("Memory: {}", memory),
