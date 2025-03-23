@@ -5,7 +5,7 @@ RustFetch est un outil en ligne de commande inspiré de `screenfetch` et `neofet
 ## Pourquoi ce projet ?
 - **Apprentissage** : Comprendre l’interaction avec le système.
 - **Rust** : Découvrir un langage performant, sécurisé, et orienté systèmes.
-- **Fun** : Créer un outil utile et personnalisable.
+- **Fun** : Sans raison valable est valable, surtout pour le fun.
 
 ## Fonctionnalités
 - Afficher le nom de l’OS (Linux, macOS, Windows).
@@ -17,10 +17,13 @@ RustFetch est un outil en ligne de commande inspiré de `screenfetch` et `neofet
 ## Comment exécuter
 1. Cloner le dépôt : `git clone https://github.com/marxhubert/rustfetch.git`
 2. Aller dans le dossier : `cd rustfetch`
-3. Compiler et exécuter : `cargo build` et `cargo run`
+3. Compiler et exécuter : `cargo run`
 
 ## Prochaines étapes
 Voir `todo.md` pour les fonctionnalités prévues.
 
 ## Contributions
 Suggestions bienvenues ! Ouvre une issue ou une PR.
+
+## Compatibilité
+Testé uniquement sur Debian (WSL2)
