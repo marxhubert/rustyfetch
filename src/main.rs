@@ -17,6 +17,7 @@ fn main() {
     let shell = system::get_shell();
     let cpu = system::get_cpu();
     let memory = system::get_memory();
+    let disk = system::get_disk_info();
 
     let infos = vec![
         user_at_host,
@@ -29,6 +30,7 @@ fn main() {
         format!("{}: {}", theme::colorize("Shell"), shell),
         format!("{}: {}", theme::colorize("CPU"), cpu),
         format!("{}: {}", theme::colorize("Memory"), memory),
+        format!("{}: {}", theme::colorize("Disk (/)"), disk),
     ];
     
     let logo = logo::get_logo();

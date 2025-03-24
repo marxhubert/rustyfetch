@@ -196,3 +196,56 @@ pub fn get_user() -> String {
         },
     }
 }
+
+pub fn get_disk_info() -> String {
+    let df_output = match cmd::new("df").arg("-B1").arg("/").output() {
+        Ok(output) if output.status.success() => String::from_utf8_lossy(&output.stdout).to_string(),
+        _ => return "Error fetching disk info (df failed)".to_string(),
+    };
+
+    let mut used_bytes = 0;
+    let mut available_bytes = 0;
+    if let Some(line) = df_output.lines().last() {
+        let fields: Vec<&str> = line.split_whitespace().collect();
+        if !df_output.starts_with("Error") && fields.len() >= 4 {
+            used_bytes = fields[2].parse::<u64>().unwrap_or(0);
+            available_bytes = fields[3].parse::<u64>().unwrap_or(0);
+        }
+    }
+
+    let total_bytes = used_bytes + available_bytes;
+    let percentage = if total_bytes > 0 {
+        (used_bytes as f64 / total_bytes as f64) * 100.0
+    } else {
+        0.0
+    };
+
+    let bar_len = 10;
+    let filled = ((percentage / 100.0) * bar_len as f64).round() as usize;
+    let empty = bar_len - filled;
+    let bar = format!(
+        "[{}{}]",
+        theme::colorize(&"#".repeat(filled)),
+        ".".repeat(empty)
+    );
+
+    let fs_type = match fs::read_to_string("/proc/mounts") {
+        Ok(content) => {
+            content.lines()
+                .find(|line| line.contains(" / "))
+                .and_then(|line| line.split_whitespace().nth(2))
+                .unwrap_or("Error")
+                .to_string()
+        }
+        Err(_) => "Error reading '/proc/mounts'".to_string(),
+    };
+
+    format!(
+        "{} / {} ({}) {} - {}",
+        format_memory(used_bytes),
+        format_memory(total_bytes),
+        theme::colorize(&format!("{:.0}%", percentage)),
+        bar,
+        fs_type
+    )
+}

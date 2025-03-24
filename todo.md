@@ -18,3 +18,4 @@
 - [ ] Afficher des infos réseau (IP, interface active)
 - [x] Afficher des infos l'utilisateur connecté
 - [ ] Afficher des infos sur le DE
+- [x] Afficher des infos sur le disk (racine)
