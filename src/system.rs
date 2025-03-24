@@ -1,6 +1,7 @@
 use std::fs;
 use std::process::Command as cmd;
 use std::env;
+use crate::theme;
 
 pub fn get_os() -> String {
     match fs::read_to_string("/etc/os-release") {
@@ -67,7 +68,32 @@ pub fn get_memory() -> String {
                 }
             }
 
-            format!("{} / {}", format_memory(mem_available * 1024), format_memory(mem_total * 1024))
+            let total_bytes = mem_total * 1024;
+            let available_bytes = mem_available * 1024;
+            let used_bytes = total_bytes - available_bytes;
+
+            let percentage = if total_bytes > 0 {
+                (used_bytes as f64 / total_bytes as f64) * 100.0
+            } else {
+                0.0
+            };
+
+            let bar_len = 10;
+            let filled = ((percentage / 100.0) * bar_len as f64).round() as usize;
+            let empty = bar_len - filled;
+            let bar = format!(
+                "[{}{}]",
+                theme::colorize(&"#".repeat(filled)),
+                ".".repeat(empty)
+            );
+
+            format!(
+                "{} / {} ({}) {}",
+                format_memory(used_bytes),
+                format_memory(total_bytes),
+                theme::colorize(&format!("{:.0}%", percentage)),
+                bar
+            )
         }
         Err(err) => format!("Error reading '/proc/meminfo': {}", err),
     }
