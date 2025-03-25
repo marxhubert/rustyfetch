@@ -1,7 +1,7 @@
 mod system;
 mod display;
-mod logo;
 mod theme;
+mod asciiart;
 
 fn main() {
     let user = system::get_user();
@@ -33,8 +33,8 @@ fn main() {
         format!("{}: {}", theme::colorize("Disk (/)"), disk),
     ];
     
-    let logo = logo::get_logo();
-    let output = display::format_output(logo, infos);
+    let asciiart = asciiart::get_asciiart(&os);
+    let output = display::format_output(asciiart, infos);
 
     print!("{}", output);
 }

@@ -14,7 +14,7 @@
 - [ ] Support multi-OS (Linux, macOS, Windows)
 - [x] Couleurs dans le terminal
 - [x] Détection de la distribution Linux (ex. : Ubuntu, Debian)
-- [ ] Logo ASCII dynamique (selon l’OS ou la distro)
+- [x] Logo ASCII dynamique (selon l’OS ou la distro)
 - [ ] Afficher des infos réseau (IP, interface active)
 - [x] Afficher des infos l'utilisateur connecté
 - [ ] Afficher des infos sur le DE
