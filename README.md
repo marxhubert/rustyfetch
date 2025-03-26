@@ -1,29 +1,29 @@
 # RustyFetch
 
-RustFetch est un outil en ligne de commande inspiré de `screenfetch` et `neofetch`, écrit en Rust. Il affiche des informations système (OS, CPU, hostname, etc.) avec un logo ASCII. Ce projet vise à explorer des concepts systèmes, tout en apprenant un langage moderne comme Rust.
+RustyFetch is a command-line tool inspired by `screenfetch` and `neofetch`, written in Rust. It displays system information (OS, CPU, hostname, etc.) alongside an ASCII logo. This project aims to explore system concepts while learning a modern language like Rust.
 
-## Pourquoi ce projet ?
-- **Apprentissage** : Comprendre l’interaction avec le système.
-- **Rust** : Découvrir un langage performant, sécurisé, et orienté systèmes.
-- **Fun** : Sans raison valable est valable, surtout pour le fun.
+## Why this project?
+- **Learning**: Understand system interactions.
+- **Rust**: Discover a performant, secure, and systems-oriented language.
+- **Fun**: No good reason is a good reason, especially for fun.
 
-## Fonctionnalités
-- Afficher le nom de l’OS (Linux, macOS, Windows).
-- Afficher le nom d’hôte de la machine.
-- Afficher un logo ASCII statique.
-- Afficher le modèle du CPU.
+## Features
+- Display the OS name (Linux, macOS, Windows).
+- Display the machine’s hostname.
+- Display a static ASCII logo.
+- Display the CPU model.
 - ...
 
-## Comment exécuter
-1. Cloner le dépôt : `git clone https://github.com/marxhubert/rustyfetch.git`
-2. Aller dans le dossier : `cd rustyfetch`
-3. Compiler et exécuter : `cargo run`
+## How to run
+1. Clone the repository: `git clone https://github.com/marxhubert/rustyfetch.git`
+2. Navigate to the folder: `cd rustyfetch`
+3. Compile and run: `cargo run`
 
-## Prochaines étapes
-Voir `todo.md` pour les fonctionnalités prévues.
+## Next steps
+See `todo.md` for planned features.
 
 ## Contributions
-Suggestions bienvenues ! Ouvre une issue ou une PR.
+Suggestions welcome! Open an issue or a PR.
 
-## Compatibilité
-Testé uniquement sur Debian (WSL2)
+## Compatibility
+Tested only on Debian (WSL2)
