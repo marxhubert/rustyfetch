@@ -1,19 +1,25 @@
 pub fn format_output(logo: String, infos: Vec<String>) -> String {
-    let logo_lines: Vec<&str> = logo.lines().collect();
+    let mut logo_lines: Vec<&str> = logo.lines().collect();
     let logo_width = logo_lines.iter().map(|line| line.len()).max().unwrap_or(0);
     let max_lines = logo_lines.len().max(infos.len());
     let diff = max_lines - logo_lines.len().min(infos.len());
     let top = (diff - (diff % 2)) / 2;
 
-    let mut bloc_to_ajust = vec![""; max_lines];
+    let mut info_bloc = vec![""; infos.len()];
     for (i, info) in infos.iter().enumerate() {
-        bloc_to_ajust[top + i] = info;
+        info_bloc[i] = info;
+    }
+
+    if logo_lines.len() > infos.len() {
+        (0..top).for_each(|_| info_bloc.insert(0, ""));
+    } else {
+        (0..top).for_each(|_| logo_lines.insert(0, ""));
     }
 
     let mut output = String::new();
     for i in 0..max_lines {
         let logo_line = logo_lines.get(i).unwrap_or(&"");
-        let info_line = bloc_to_ajust.get(i).unwrap_or(&"");
+        let info_line = info_bloc.get(i).unwrap_or(&"");
         output.push_str(&format!(
             "{:<width$} {}\n",
             logo_line,
