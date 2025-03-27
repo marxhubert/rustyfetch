@@ -1,10 +1,9 @@
 use std::fs;
 use std::process::Command;
 use std::collections::HashMap;
-use crate::theme;
 use crate::utils;
 
-fn get_fs() -> String {
+pub fn get_fs() -> String {
     match fs::read_to_string("/proc/mounts") {
         Ok(content) => {
             content.lines()
@@ -58,35 +57,9 @@ fn disk_info() -> Result<HashMap<String, u64>, String> {
 pub fn get_disk_info() -> String {
     match disk_info() {
         Ok(info) => {
-            let used = info.get("used_bytes").copied().unwrap_or(0);
+            let used = info.get("total_bytes").copied().unwrap_or(0) - info.get("available_bytes").copied().unwrap_or(0);
             let total = info.get("total_bytes").copied().unwrap_or(0);
-            let percentage = info.get("percentage").copied().unwrap_or(0);
-
-            format!(
-                "{} / {} ({}) - {}",
-                utils::format_bytes(used),
-                utils::format_bytes(total),
-                theme::colorize(&format!("{:.0}%", percentage)),
-                get_fs()
-            )
-        }
-        Err(_) => "Error fetching disk info".to_string(),
-    }
-}
-
-pub fn get_disk_usage() -> String {
-    match disk_info() {
-        Ok(info) => {
-            let percentage = info.get("percentage").copied().unwrap_or(0);
-            let bar_len = 20;
-            let filled = (percentage as f64 / 100.0 * bar_len as f64).round() as usize;
-            let empty = bar_len - filled;
-
-            format!(
-                "[{}{}]",
-                theme::colorize(&"#".repeat(filled)),
-                ".".repeat(empty)
-            )
+            utils::format_bar(used, total)
         }
         Err(_) => "Error fetching disk info".to_string(),
     }
