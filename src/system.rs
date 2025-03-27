@@ -1,7 +1,6 @@
 use std::fs;
 use std::process::Command as cmd;
 use std::env;
-use crate::theme;
 
 pub fn get_os() -> String {
     match fs::read_to_string("/etc/os-release") {
@@ -36,80 +35,6 @@ pub fn get_hostname() -> String {
     match fs::read_to_string("/etc/hostname") {
         Ok(hostname) => hostname.trim().to_string(),
         Err(err) => format!("Hostname error: {}", err),
-    }
-}
-
-pub fn get_cpu() -> String {
-    match fs::read_to_string("/proc/cpuinfo") {
-        Ok(content) => {
-            for line in content.lines() {
-                if line.starts_with("model name") {
-                    return line.split(':').nth(1).unwrap_or("N/A").trim().to_string();
-                }
-            }
-            "N/A".to_string()
-        }
-        Err(err) => format!("Error reading '/proc/cpuinfo': {}", err),
-    }
-}
-
-pub fn get_memory() -> String {
-    match fs::read_to_string("/proc/meminfo") {
-        Ok(content) => {
-            let mut mem_total: u64 = 0;
-            let mut mem_available: u64 = 0;
-
-            for line in content.lines() {
-                if let Some(value) = line.strip_prefix("MemTotal:") {
-                    mem_total = value.split_whitespace().nth(0).and_then(|s| s.parse().ok()).unwrap_or(0);
-                }
-                if let Some(value) = line.strip_prefix("MemAvailable:") {
-                    mem_available = value.split_whitespace().nth(0).and_then(|s| s.parse().ok()).unwrap_or(0);
-                }
-            }
-
-            let total_bytes = mem_total * 1024;
-            let available_bytes = mem_available * 1024;
-            let used_bytes = total_bytes - available_bytes;
-
-            let percentage = if total_bytes > 0 {
-                (used_bytes as f64 / total_bytes as f64) * 100.0
-            } else {
-                0.0
-            };
-
-            let bar_len = 10;
-            let filled = ((percentage / 100.0) * bar_len as f64).round() as usize;
-            let empty = bar_len - filled;
-            let bar = format!(
-                "[{}{}]",
-                theme::colorize(&"#".repeat(filled)),
-                ".".repeat(empty)
-            );
-
-            format!(
-                "{} / {} ({}) {}",
-                format_memory(used_bytes),
-                format_memory(total_bytes),
-                theme::colorize(&format!("{:.0}%", percentage)),
-                bar
-            )
-        }
-        Err(err) => format!("Error reading '/proc/meminfo': {}", err),
-    }
-}
-
-fn format_memory(input: u64) -> String {
-    let units = ["", "K", "M", "G", "T", "P", "E"];
-    let factor = (input.ilog10() / 3) as usize;
-    let factor = factor.min(units.len() - 1);
-
-    let value = input as f64 / 1024_f64.powi(factor as i32);
-
-    if value.fract() < 0.01 {
-        format!("{} {}B", value.round(), units[factor])
-    } else {
-        format!("{:.2} {}B", value, units[factor])
     }
 }
 
@@ -195,57 +120,4 @@ pub fn get_user() -> String {
             Err(err) => format!("Error executing whoami: {}", err),
         },
     }
-}
-
-pub fn get_disk_info() -> String {
-    let df_output = match cmd::new("df").arg("-B1").arg("/").output() {
-        Ok(output) if output.status.success() => String::from_utf8_lossy(&output.stdout).to_string(),
-        _ => return "Error fetching disk info (df failed)".to_string(),
-    };
-
-    let mut used_bytes = 0;
-    let mut available_bytes = 0;
-    if let Some(line) = df_output.lines().last() {
-        let fields: Vec<&str> = line.split_whitespace().collect();
-        if !df_output.starts_with("Error") && fields.len() >= 4 {
-            used_bytes = fields[2].parse::<u64>().unwrap_or(0);
-            available_bytes = fields[3].parse::<u64>().unwrap_or(0);
-        }
-    }
-
-    let total_bytes = used_bytes + available_bytes;
-    let percentage = if total_bytes > 0 {
-        (used_bytes as f64 / total_bytes as f64) * 100.0
-    } else {
-        0.0
-    };
-
-    let bar_len = 10;
-    let filled = ((percentage / 100.0) * bar_len as f64).round() as usize;
-    let empty = bar_len - filled;
-    let bar = format!(
-        "[{}{}]",
-        theme::colorize(&"#".repeat(filled)),
-        ".".repeat(empty)
-    );
-
-    let fs_type = match fs::read_to_string("/proc/mounts") {
-        Ok(content) => {
-            content.lines()
-                .find(|line| line.contains(" / "))
-                .and_then(|line| line.split_whitespace().nth(2))
-                .unwrap_or("Error")
-                .to_string()
-        }
-        Err(_) => "Error reading '/proc/mounts'".to_string(),
-    };
-
-    format!(
-        "{} / {} ({}) {} - {}",
-        format_memory(used_bytes),
-        format_memory(total_bytes),
-        theme::colorize(&format!("{:.0}%", percentage)),
-        bar,
-        fs_type
-    )
 }
