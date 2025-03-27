@@ -11,7 +11,7 @@ fn main() {
     let user = system::get_user();
     let hostname = system::get_hostname();
 
-    let user_at_host = format!("{}@{}", theme::colorize(&user), theme::colorize(&hostname));
+    let user_at_host = format!("{}@{}", theme::primary(&user), theme::primary(&hostname));
     let separator = vec!["="; format!("{}@{}", user, hostname).len()].join("");
 
     let os = system::get_os();
@@ -22,25 +22,22 @@ fn main() {
     let cpu_info = cpu::get_cpu_info();
     let cpu_usage = cpu::get_cpu_usage();
     let mem_info = memory::get_mem_info();
-    let mem_usage = memory::get_mem_usage();
     let disk_info = disk::get_disk_info();
-    let disk_usage = disk::get_disk_usage();
+    let disk_fs = disk::get_fs();
 
     let infos = vec![
         user_at_host,
         separator,
-        format!("{}: {}", theme::colorize("OS"), os),
-        format!("{}: {}", theme::colorize("Host"), hostname),
-        format!("{}: {}", theme::colorize("Kernel"), kernel),
-        format!("{}: {}", theme::colorize("Uptime"), uptime),
-        format!("{}: {}", theme::colorize("Packages"), packages),
-        format!("{}: {}", theme::colorize("Shell"), shell),
-        format!("{}: {}", theme::colorize("CPU"), cpu_info),
-        format!("{}: {}", theme::colorize("CPU Usage"), cpu_usage),
-        format!("{}: {}", theme::colorize("Memory"), mem_info),
-        format!("{}: {}", theme::colorize("Memory Usage"), mem_usage),
-        format!("{}: {}", theme::colorize("Disk (/)"), disk_info),
-        format!("{}: {}", theme::colorize("Disk Usage"), disk_usage),
+        format!("{}: {}", theme::primary("OS"), os),
+        format!("{}: {}", theme::primary("Host"), hostname),
+        format!("{}: {}", theme::primary("Kernel"), kernel),
+        format!("{}: {}", theme::primary("Uptime"), uptime),
+        format!("{}: {}", theme::primary("Packages"), packages),
+        format!("{}: {}", theme::primary("Shell"), shell),
+        format!("{}: {}", theme::primary("CPU"), cpu_info),
+        format!("{}: {}", theme::primary("CPU Usage"), cpu_usage),
+        format!("{}: {}", theme::primary("Memory"), mem_info),
+        format!("{}: {}", theme::primary("Disk /"), format!("({}) {}", disk_fs, disk_info)),
     ];
     
     let asciiart = asciiart::get_asciiart(&os);

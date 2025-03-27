@@ -1,5 +1,5 @@
 use std::fs;
-use crate::theme;
+use crate::utils;
 use std::io::{BufRead, BufReader};
 use std::thread::sleep;
 use std::time::Duration;
@@ -33,22 +33,9 @@ pub fn get_cpu_usage() -> String {
 
     let total_diff = (second.0 as f64) - (first.0 as f64);
     let idle_diff = (second.1 as f64) - (first.1 as f64);
-    let usage = if total_diff > 0.0 {
-        ((total_diff - idle_diff) / total_diff) * 100.0
-    } else {
-        0.0
-    };
+    let used = total_diff - idle_diff;
 
-    let bar_len = 20;
-    let filled = (usage / 100.0 * bar_len as f64).round() as usize;
-    let empty = bar_len - filled;
-
-    format!(
-        "[{}{}] ({})",
-        theme::colorize(&"#".repeat(filled)),
-        ".".repeat(empty),
-        theme::colorize(&format!("{:.1}%", usage))
-    )
+    utils::format_bar(used as u64, total_diff as u64)
 }
 
 pub fn get_cpu_info() -> String {
