@@ -121,3 +121,32 @@ pub fn get_user() -> String {
         },
     }
 }
+
+pub fn get_network() -> String {
+    cmd::new("ip")
+        .args(["-4", "addr", "show"])
+        .output()
+        .map(|output| {
+            if output.status.success() {
+                let output_str = String::from_utf8_lossy(&output.stdout);
+                output_str
+                    .lines()
+                    .filter(|line| line.contains("inet") && !line.contains("127.0.0.1"))
+                    .next()
+                    .map(|line| {
+                        let parts: Vec<&str> = line.split_whitespace().collect();
+                        if parts.len() >= 2 {
+                            let ip = parts[1].split('/').next().unwrap_or("Unknown IP");
+                            let interface = parts.get(parts.len() - 1).unwrap_or(&"Unknown interface");
+                            format!("{}: {}", interface, ip)
+                        } else {
+                            "Unknown network".to_string()
+                        }
+                    })
+                    .unwrap_or("No active network".to_string())
+            } else {
+                "Network command failed".to_string()
+            }
+        })
+        .unwrap_or_else(|_| "Error fetching network info".to_string())
+}

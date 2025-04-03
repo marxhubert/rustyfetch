@@ -24,6 +24,7 @@ fn main() {
     let mem_info = memory::get_mem_info();
     let disk_info = disk::get_disk_info();
     let disk_fs = disk::get_fs();
+    let network_info = system::get_network();
 
     let infos = vec![
         user_at_host,
@@ -38,6 +39,7 @@ fn main() {
         format!("{}: {}", theme::primary("CPU Usage"), cpu_usage),
         format!("{}: {}", theme::primary("Memory"), mem_info),
         format!("{}: {}", theme::primary("Disk /"), format!("({}) {}", disk_fs, disk_info)),
+        format!("{}: {}", theme::primary("Network"), network_info),
     ];
     
     let asciiart = asciiart::get_asciiart(&os);
