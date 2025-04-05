@@ -36,7 +36,7 @@ fn main() {
         format!("{}: {}", theme::primary("Packages"), packages),
         format!("{}: {}", theme::primary("Shell"), shell),
         format!("{}: {}", theme::primary("CPU"), cpu_info),
-        format!("{}: {}", theme::primary("CPU Usage"), cpu_usage),
+        format!("{}: {}", theme::primary("CPU usage"), cpu_usage),
         format!("{}: {}", theme::primary("Memory"), mem_info),
         format!("{}: {}", theme::primary("Disk /"), format!("({}) {}", disk_fs, disk_info)),
         format!("{}: {}", theme::primary("Network"), network_info),
